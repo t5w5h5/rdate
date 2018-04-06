@@ -141,9 +141,9 @@ class TestDate(unittest.TestCase):
         d = Date.today()
 
         self.assertEqual(d, d.next().prev())
-        self.assertEqual(d, d.next(Period.Week).prev(Period.Week))
-        self.assertEqual(d, d.next(Period.Month).prev(Period.Month))
-        self.assertEqual(d, d.next(Period.Year).prev(Period.Year))
+        self.assertEqual(d, d.next(1, Period.Week).prev(1, Period.Week))
+        self.assertEqual(d, d.next(1, Period.Month).prev(1, Period.Month))
+        self.assertEqual(d, d.next(1, Period.Year).prev(1, Period.Year))
         self.assertEqual(d, d.next().prev())
         self.assertNotEqual(d, d.next())
         self.assertNotEqual(d, d.prev())
@@ -159,21 +159,21 @@ class TestDate(unittest.TestCase):
     def test_next(self):
         d = Date(2015, 1, 1)
         self.assertEqual(d.next(), Date(2015, 1, 2))
-        self.assertEqual(d.next(n=44), Date(2015, 2, 14))
-        self.assertEqual(d.next(n=0), d)
+        self.assertEqual(d.next(44), Date(2015, 2, 14))
+        self.assertEqual(d.next(0), d)
 
     def test_prev(self):
         d = Date(2015, 1, 1)
 
         self.assertEqual(d.prev(), Date(2014, 12, 31))
-        self.assertEqual(d.prev(n=44), Date(2014, 11, 18))
-        self.assertEqual(d.prev(n=0), d)
+        self.assertEqual(d.prev(44), Date(2014, 11, 18))
+        self.assertEqual(d.prev(0), d)
 
-        self.assertEqual(d.prev(Period.Month), Date(2014, 12, 1))
-        self.assertEqual(d.prev(Period.Month, 2), Date(2014, 11, 1))
+        self.assertEqual(d.prev(1, Period.Month), Date(2014, 12, 1))
+        self.assertEqual(d.prev(2, Period.Month), Date(2014, 11, 1))
 
-        self.assertEqual(Date(2014, 12, 31).prev(Period.Month), Date(2014, 11, 30))
-        self.assertEqual(Date(2014, 2, 28).prev(Period.Month), Date(2014, 1, 28))
+        self.assertEqual(Date(2014, 12, 31).prev(1, Period.Month), Date(2014, 11, 30))
+        self.assertEqual(Date(2014, 2, 28).prev(1, Period.Month), Date(2014, 1, 28))
 
     def test_envelope(self):
         d = Date(2015, 6, 2)

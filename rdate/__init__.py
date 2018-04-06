@@ -249,13 +249,13 @@ class Date:
         """True if self is a Date within a leap year"""
         return self.length(period=Period.Year) == 366
 
-    def move(self, period=Period.Day, n=0):
+    def move(self, n=0, period=Period.Day):
         """Return new Date *n* periods away from self. *n* can be negative or positive."""
         if period is Period.Day:
             moved_date = _datetime.date(self.year, self.month, self.day) + _datetime.timedelta(days=n)
             return Date(moved_date.year, moved_date.month, moved_date.day)
         if period is Period.Week:
-            return self.move(Period.Day, n * 7)
+            return self.move(n*7, Period.Day)
         if period is Period.Month:
             if (self.month + n) < 1:
                 year = self.year + int((self.month + n - 12) / 12)
@@ -269,13 +269,13 @@ class Date:
         if period is Period.Year:
             return Date(self.year + n, self.month, self.day)
 
-    def next(self, period=Period.Day, n=1):
+    def next(self, n=1, period=Period.Day):
         """Return new Date *n* periods after self."""
-        return self.move(period, +n)
+        return self.move(+n, period)
 
-    def prev(self, period=Period.Day, n=1):
+    def prev(self, n=1, period=Period.Day):
         """Return new Date *n* periods prior to self."""
-        return self.move(period, -n)
+        return self.move(-n, period)
 
     def envelope(self, period=Period.Week, to_date=None):
         """Return tuple of *period* that envelopes self. If *to_date* is not None, the envelope will
@@ -286,7 +286,7 @@ class Date:
                 raise ValueError('to_date must be after this date')
             return self, to_date
         if period is Period.Week:
-            return self.move(n=-self.weekday.value), to_date.move(n=(6 - to_date.weekday.value))
+            return self.move(-self.weekday.value), to_date.move(6-to_date.weekday.value)
         if period is Period.Month:
             _, last_day_of_month = _calendar.monthrange(to_date.year, to_date.month)
             return Date(self.year, self.month, 1), Date(to_date.year, to_date.month, last_day_of_month)
